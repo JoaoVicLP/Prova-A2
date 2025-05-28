@@ -1,0 +1,42 @@
+DOCKERFILE - PRODUCTS
+FROM node:18 faz com que o docker utilize a imagem oficial do Node.js, veesão 18
+WORKDIR /app define qual diretório será usado.
+COPY . . copia todos os arquivos no conteiner
+RUN npm init -y && npm install express Instala as dependencias necessarias pra api node.js
+EXPOSE 3001 Expoe a porta 3001, porta daqual a api responderá as requisições
+CMD ["node", "index.js"] da inicio a aplicação.
+
+DOCKERFILE - ORDERS
+FROM python:3.11 faz com que o docker utilize a imagem oficial do Python, versão 3.11
+WORKDIR /app define qual diretório será usado.
+COPY . . copia todos os arquivos no conteiner.
+RUN pip install --no-cache-dir -r requirements.txt Instala as dependencias listadas no requirements.txt sem armazenar cache.
+EXPOSE 3002 Expoe a porta 3002, porta daqual a api responderá as requisições.
+CMD ["python", "app.py"] da inicio a aplicação.
+
+DOCKERFILE - PAYMENTS
+FROM php:8.2-cli faz com que o docker utilize a imagem oficial do PHP no modo CLI
+WORKDIR /app define qual diretório será usado.
+COPY . . copia todos os arquivos no conteiner.
+EXPOSE 3003 Expoe a porta 3003, porta daqual a api responderá as requisições.
+CMD ["php", "-S", "0.0.0.0:3003"] inicia o servidor embutido do PHP.
+
+DOCKER-COMPOSE.YML
+version: '3.8'
+Define qual versão do Docker Compose que está sendo usada, aqui é a versão 3.8
+services:
+É o elemento responsavel para definir cada conteiner que fará parte da aplicação.
+build: 
+É o elemento que informa o caminho onde está o Dockerfile do serviço.
+ports: 
+É o elemento que mapeia as portas do container.
+por exemplo a 3001:3001 seria a porta 3001 do computador para a porta 3001 do conteiner.
+depends_on:
+Controla a ordem de inicialização dos serviços.
+image:
+Indica o a imagem oficial do serviço já existente no Docker Hub. exemplo redis:7 e mysql:8
+environment:
+Define variáveis de ambiente internas do container.
+Dentro é definido o 
+MYSQL_ROOT_PASSWORD = a senha do usuário root
+MYSQL_DATABASE = automaticamente o banco de dados
